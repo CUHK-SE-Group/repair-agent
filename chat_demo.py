@@ -11,9 +11,8 @@ if __name__ == '__main__':
 
     function_context_file_path = 'data/lined_data_v5.csv'
     error_message_file_path = 'data/error_message_examples.csv'
-    # chat_history_file_path = 'chat_history.json' # disable chat history if there is no few-shot examples.
-    chat_history_file_path = None
-    logger.add("remote_chat.log")
+    chat_history_file_path = 'chat_history.json'
+    logger.add("data/remote_chat.log")
 
     remote_chat_agent = RemoteChatAgent(args.api_key, args.model_name, chat_history_file_path, logger)
     prompt_formatter = PromptFormatter(function_context_file_path, error_message_file_path)

@@ -40,7 +40,7 @@ class PromptFormatter:
         
     def format_prompt(self, function, comment, exceptions, tests):
         prompt = f"""
-You are given the task to analyze a problematic piece of code and de-bug it. Here are the details:
+You are given the task to analyze and debug a problematic piece of code. Here are the details:
 
 ```markdown
 <Bug Report Start>
