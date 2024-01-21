@@ -7,6 +7,9 @@ TODO:
 1. Few-shot prompting
 2. Majority voting
 3. Patch extraction
+
+Some bugs are not caused by "wrong" statements in the code, but by missing statements.
+These cases must be considered in the prompt.
 """
 
 class PromptFormatter:
@@ -26,9 +29,16 @@ class PromptFormatter:
         return '\n'.join(lines)
     
     def get_one_data(self, idx):
-        func_row = self.func.iloc[idx]
-        ID = func_row['ID']
-        msg_rows = self.msg[self.msg['ID'] == ID]
+        if isinstance(idx, int):
+            func_row = self.func.iloc[idx]
+            ID = func_row['ID']
+            msg_rows = self.msg[self.msg['ID'] == ID]
+        elif isinstance(idx, str):
+            ID = idx
+            func_row = self.func[self.func['ID'] == ID].iloc[0]
+            msg_rows = self.msg[self.msg['ID'] == ID]
+        else:
+            raise ValueError("idx must be 'int' (ITER) or 'str' (ID))")
 
         function = func_row['replaced_method']
         comment = func_row['comment']
@@ -39,11 +49,8 @@ class PromptFormatter:
         return ID, {"function": function, "comment": comment, "exceptions": exceptions, "tests": tests}
         
     def format_prompt(self, function, comment, exceptions, tests):
-        prompt = f"""
-You are given the task to analyze and debug a problematic piece of code. Here are the details:
-
-```markdown
-<Bug Report Start>
+        prompt = f"""```markdown
+[Bug Report Start]
 
 **Function Comment of Buggy Method:**
 {comment}
@@ -57,14 +64,7 @@ You are given the task to analyze and debug a problematic piece of code. Here ar
 **Failed JUnit Tests:**
 {tests}
 
-<Bug Report End>
-```
-
-Please follow a systematic approach while analyzing this bug. Reflect on each step informed by the given procedure in the previous dialogue. 
-
-After your analysis, write a patch that rectifies the identified bug. The Patch should be presented in Markdown format. Begin this section with '<Patch Solution Start>' and end it with '<Patch Solution End>'. 
-
-Ensure that your patch specifically targets the bug lines without altering any unrelated, correct part of the function. The modified lines in the patch should be prefixed with their corresponding line numbers from the buggy code.
-"""
+[Bug Report End]
+```"""
         return prompt.strip()
     
