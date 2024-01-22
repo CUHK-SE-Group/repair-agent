@@ -50,8 +50,6 @@ class PromptFormatter:
         
     def format_prompt(self, function, comment, exceptions, tests):
         prompt = f"""```markdown
-[Bug Report Start]
-
 **Function Comment of Buggy Method:**
 {comment}
 
@@ -63,8 +61,9 @@ class PromptFormatter:
 
 **Failed JUnit Tests:**
 {tests}
+```
 
-[Bug Report End]
-```"""
+Please follow your duties as an AI debugger as explained in your system prompt. Specifically, carefully analyze the bug, propose a suitable fix, and if any code is to be changed, present it in a markdown formatted patch, following the rules specified.
+"""
         return prompt.strip()
     

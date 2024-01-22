@@ -39,13 +39,15 @@ class RemoteChatAgent:
                 'Authorization': f'Bearer {self.api_key}'
             }
             url = 'https://api.ai-gaochao.cn/v1/chat/completions'
-        if proxy == 'OMG':
+        elif proxy == 'OMG':
             headers = {
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'Content-Type': 'application/json',
                 'Authorization': f'Bearer {self.api_key}'
             }
             url = 'https://aigptx.top/v1/chat/completions'
+        else:
+            raise ValueError("proxy must be 'AI' or 'OMG'")
         try:
             response = self.safe_request(url, data, headers)
             self.logger.info(f"ID: {ID}:\tSuccessfully made request")

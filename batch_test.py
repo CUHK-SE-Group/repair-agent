@@ -1,4 +1,5 @@
 from RemoteChatAgent import RemoteChatAgent
+from LocalChatAgent import LocalChatAgent
 from PromptFormatter import PromptFormatter
 import argparse
 from loguru import logger
@@ -44,21 +45,26 @@ id_range = ['1-25',
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--api_key', type=str, required=True)
+    parser.add_argument('--api_key', default="sh-xxxx", type=str)
     parser.add_argument('--model_name', default="gpt-4", type=str) # Choose model: gpt-3.5-turbo, gpt-4, claude-2, palm-2-chat-bison, gemini-pro
     parser.add_argument('--num_bugs', default=20, type=int)
     parser.add_argument('--num_patches', default=10, type=int)
+    parser.add_argument('--agent', default="remote", type=str)
     
     parser.add_argument('--func_path', default="data/lined_data_v6.csv", type=str)
     parser.add_argument('--test_path', default="data/error_message_all.csv", type=str)
-    parser.add_argument('--history_path', default="debug_history_refined.json", type=str)
-    parser.add_argument('--log_path', default="data/remote_chat_batch.log", type=str)
-    parser.add_argument('--results_path', default="data/batch_results.csv", type=str)
+    parser.add_argument('--history_path', default="debug_history_plus.json", type=str)
+    parser.add_argument('--log_path', default="data/batch.log", type=str)
+    parser.add_argument('--results_path', default="data/results.csv", type=str)
+    parser.add_argument('--model_dir', default="..", type=str)
     parser.add_argument('--proxy', default='AI', type=str)
     args = parser.parse_args()
     logger.add(args.log_path)
 
-    remote_chat_agent = RemoteChatAgent(args.api_key, args.model_name, args.history_path, logger)
+    if args.agent == 'local':
+        chat_agent = LocalChatAgent(args.model_dir, args.model_name, args.history_path, logger)
+    elif args.agent == 'remote':
+        chat_agent = RemoteChatAgent(args.api_key, args.model_name, args.history_path, logger)
     prompt_formatter = PromptFormatter(args.func_path, args.test_path)
 
     df_results = pd.DataFrame(columns=['ID', 'Bug Report', 'Patch Solutions'])
@@ -78,6 +84,6 @@ if __name__ == '__main__':
         prompt = prompt_formatter.format_prompt(**data)       
         for j in range(args.num_patches):
             logger.info(f"Generating Patch {j+1} for BugID: {bug_id} ...")
-            response = remote_chat_agent.chat(prompt, ID, proxy=args.proxy)
+            response = chat_agent.chat(prompt, ID, proxy=args.proxy)
             df_results.loc[i * args.num_patches + j] = {'ID': bug_id, 'Bug Report': prompt, 'Patch Solutions': response}
             df_results.to_csv(args.results_path, sep='¥', encoding='utf-8')
