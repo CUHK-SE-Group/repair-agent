@@ -33,7 +33,6 @@ def replace_diff(original, modified, pure):
     output_lines = []
     in_chunk = False
 
-    # 遍历diff
     for line in diff:
         if pure:
             ### ignore empty lines
