@@ -4,7 +4,7 @@
 - Defects4J: https://github.com/rjust/defects4j
 - DebugBench: https://github.com/thunlp/DebugBench
 
-The first linked dataset is Defects4J, which contains a total of 837 bugs from the . We use `utils.py` to check out and extract all the single-function data to `data/eval.csv`. We further use `data/cleaner.py` to add the reformated masked buggy program in `data/eval.csv`. The masked programs is for the experiments in RQ2.
+The first linked dataset is Defects4J, which contains a total of 837 bugs from the GitHub repositories. We use `utils.py` to check out and extract all the single-function data to `data/eval.csv`. We further use `data/cleaner.py` to add the reformated masked buggy program in `data/eval.csv`. The masked programs is for the experiments in RQ2.
 
 The second linked dataset is DebugBench, which contains a total of 4,296 bugs (C++/Python/Java) from LeetCode. We also use `data/cleaner.py` to add the masked verison of the buggy programs for RQ2.
 
