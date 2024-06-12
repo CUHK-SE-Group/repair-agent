@@ -32,3 +32,7 @@ The first link is the document of OpenAI APIs, and the second link is the downlo
     - Modify the `COOKIE_LIST` of the `LeetcodeVerifier.py` to use your own LeetCode cookie.
     - Modify the last line of `debugbench_test_G&V.py` to enable the `verify()` method.
     - Run `debugbench_test_G&V.py`
+
+## Price Calculation
+
+Run `price.py` to gain the average price of fixing each bug (with 10 re-sampling time) on Defects4J.
