@@ -33,8 +33,14 @@ class RemoteChatter:
                 'Authorization': f'Bearer {self.api_key}'
             }
             url = 'https://aigptx.top/v1/chat/completions'
+        elif proxy == 'OpenAI':
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {self.api_key}'
+            }
+            url = 'https://api.openai.com/v1/chat/completions'
         else:
-            raise ValueError("proxy must be 'AI' or 'OMG'")
+            raise ValueError("proxy must be 'AI', 'OMG', or 'OpenAI'")
         ti = 0
         while ti <= 10:
             response_api = self.safe_request(url, data, headers)

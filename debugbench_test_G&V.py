@@ -248,17 +248,17 @@ if __name__ == '__main__':
     parser.add_argument('--api_key', default="sh-xxxx", type=str)
     parser.add_argument('--model_dir', default="..", type=str)
     parser.add_argument('--chat_mode', default="remote", type=str) # remote or local
-    parser.add_argument('--remote_model', default="gpt-4", type=str) # Choose model: gpt-3.5-turbo, gpt-4, claude-2, palm-2-chat-bison, gemini-pro
+    parser.add_argument('--remote_model', default="gpt-4-0613", type=str) # Choose model: gpt-3.5-turbo, gpt-4, claude-2, palm-2-chat-bison, gemini-pro
     parser.add_argument('--local_model', default='mixtral-8x7b-instruct', type=str)
     parser.add_argument('--data_path', default="data/eval.json", type=str) 
     parser.add_argument('--result_path', default="result/debugbench/results", type=str)
     parser.add_argument('--eval_path', default="result/debugbench/evaluation", type=str)
-    parser.add_argument('--proxy', default='AI', type=str)
+    parser.add_argument('--proxy', default='OpenAI', type=str)
     parser.add_argument('--mode', default='agent', type=str)
     parser.add_argument('--shot', default=1, type=int)
     parser.add_argument('--max_try', default=3, type=int)
     parser.add_argument('--temperature', default=1.0, type=float)
-    parser.add_argument('--ablation', default='', type=str)
+    parser.add_argument('--ablation', default='full', type=str)
     args = parser.parse_args()
 
     result_elements = [args.result_path, args.mode, args.ablation, str(args.shot)]
@@ -274,9 +274,7 @@ if __name__ == '__main__':
         raise ValueError("chat_mode must be 'remote' or 'local'")
 
     debug(args)
-    # merge(args)
-    # evaluate(args)
-    # verify(args)
+    verify(args)
 
     
             
