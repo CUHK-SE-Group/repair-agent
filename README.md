@@ -20,6 +20,10 @@ We have already extract these data in `data` directory.
 
 The first link is the document of OpenAI APIs, and the second link is the download page of Mixtral model.
 
+## Scripts
+
+The entry of the script is `batch.sh`. The main scripts for Defects4J and DebugBench Experiments are `defects4j_test_G&V.py` and `debugbench_test_G&V.py`
+
 ## How to run
 
 ### Preparation
