@@ -26,14 +26,14 @@ The entry of the script is `batch.sh`. The main scripts for Defects4J and DebugB
 
 ## How to run
 
-### Preparation
+### Environment Preparation
 
 - Modify the first line of `batch.sh` to use your own API key: `api_key='sk-xxx'`
     - To obtain an OpenAI API Key to start generation. 
     - See [OpenAI Platform](https://platform.openai.com/api-keys) to understand how to get your own API key.
 - Modify the `COOKIE_LIST` of the `LeetcodeVerifier.py` to use your own `LEETCODE_SESSION` and `csrf_token` cookie.
     - To obtain the `LEETCODE_SESSION` and `csrf_token` cookie, you may first login your LeetCode account and utilize the developer view in web browser like Chrome or use browser extensions like [EditThisCookie](https://chromewebstore.google.com/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?pli=1). 
-    - The `leetcode_env` package comes from [Leetcode Hard Gym](https://github.com/GammaTauAI/leetcode-hard-gym). More implementation details are available in [DebugBench GitHub](https://github.com/thunlp/DebugBench) and [Debugbench Huggingface](https://huggingface.co/datasets/Rtian/DebugBench)
+    - The `leetcode_env` package comes from [Leetcode Hard Gym](https://github.com/GammaTauAI/leetcode-hard-gym). More implementation details are available in [DebugBench GitHub](https://github.com/thunlp/DebugBench) and [DebugBench Huggingface](https://huggingface.co/datasets/Rtian/DebugBench)
 - Run `utils.py` to checkout the Defects4J repositories and corresponding test suites in your local environment. 
     - Before checkout, please ensure the `defects4j` command is valid in your environment. Use `defects4j info -p Lang` to check installation. If not installed, please install [here](https://github.com/rjust/defects4j).
     - After checkout, the code and test are in the `defects4j` directory.
