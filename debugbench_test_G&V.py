@@ -34,6 +34,8 @@ def debug(args):
         history_list = HISTORY_HYBRID_LIST
     elif args.mode == 'reverse':
         history_list = HISTORY_REVERSE_LIST
+    elif args.mode == 'pure':
+        history_list = HISTORY_PURE_LIST
 
 
     if args.chat_mode == 'remote':
@@ -92,6 +94,11 @@ def debug(args):
             else:
                 query = query.replace("{BUGGY_CODE}", sample['buggy_code'].strip())
                 query = query.strip() + "\nPlease follow your duty as an AI Debugger and generate a refined version of the buggy program."
+        elif args.mode == 'pure':
+            query = USER_PROMPT
+            query = query.replace("{LANGUAGE}", sample['language'].strip())
+            query = query.replace("{BUGGY_CODE}", sample['buggy_code'].strip())
+            query = query.strip() + "\nPlease follow your duty as an AI Debugger and generate a refined version of the buggy program."
         else:
             raise ValueError("mode must be 'located' or 'hybrid' or 'reverse' or 'agent'")
 
@@ -116,7 +123,7 @@ def debug(args):
 
         for j in range(args.max_try):
             try:
-                if args.mode in {'agent', 'hybrid'}:
+                if args.mode in {'agent', 'hybrid', 'pure'}:
                     response = debugger.chat(prompt, i, args.proxy, temperature=args.temperature)
                     fixed_code = extract_code(response)[0]
                     df_results.loc[i * args.max_try + j] = {'ID': i, 'lang': sample['language'], 'slug': sample['slug'], 'bug': sample['buggy_code'], 'diff': 'None', 'fix': fixed_code}
@@ -273,7 +280,7 @@ if __name__ == '__main__':
     else:
         raise ValueError("chat_mode must be 'remote' or 'local'")
 
-    debug(args)
+    # debug(args)
     verify(args)
 
     

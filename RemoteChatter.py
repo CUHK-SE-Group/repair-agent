@@ -25,7 +25,7 @@ class RemoteChatter:
                 'Content-Type': 'application/json',
                 'Authorization': f'Bearer {self.api_key}'
             }
-            url = 'https://api.openai.com/v1/chat/completions'
+            url = 'https://api.ai-gaochao.cn/v1/chat/completions'
         elif proxy == 'OMG':
             headers = {
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',

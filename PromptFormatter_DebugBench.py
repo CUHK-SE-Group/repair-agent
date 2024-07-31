@@ -1,4 +1,4 @@
-
+PURE_INSTRUCTION = """As an AI debugger, your duty is to generate a refined version for each buggy function. Do not response anything else except the refined version of buggy function."""
 
 LOCATED_INSTRUCTION = """As an AI debugger, your duty is to generate code snippets to fill the chunks marked as `<Chunk_For_Modification>` in each provided buggy function. Do not response anything else except the generated code snippets."""
 
@@ -65,6 +65,47 @@ FREE_INSTRUCTION = "\n\nThis is a bug-free code snippet. Do not generate any nat
 
 
 
+EXAMPLE_INPUT_CPP_REFINE = """```cpp
+class Solution {
+public:
+
+vector<int> countsort(vector<int> &nums)
+{
+    int n = nums.size();
+    map<int, int> m;
+    for (int i = 0; i < n; i++ )
+        m[nums[i]]++;
+
+    nums.clear();
+    for (auto it : m)
+    {
+        int cnt = it.second;
+        while (cnt--)
+        {
+            nums.push_back(it.first);
+        }
+    }
+    return nums;
+}
+
+int maximumGap(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n < 2)
+        return 0;
+    vector<int> sortednums = countsort(nums);
+
+    int maxgap = INT_MIN;
+    for (int i = 1; i <= n; i++)
+    {
+        int currgap = sortednums[i] - sortednums[i - 1];
+        maxgap = max(maxgap, currgap);
+    }
+
+    return maxgap;
+}
+};
+```"""
 
 
 
@@ -281,6 +322,37 @@ EXAMPLE_OUTPUT_CPP_HUNK = """```cpp
 
 
 
+EXAMPLE_INPUT_JAVA_REFINE = """```java
+class Solution {
+    public String[] findRelativeRanks(int[] score) {
+         int n=score.length;
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)-> score[b]-score[a]);
+        for(int i=0;i<n;i++) pq.add(i);
+        String[] ans = null;
+        int i=1;
+        while(!pq.isEmpty()){
+            int idx=pq.poll();
+            if(i=1) { ans[idx]="Gold Medal"; i++;} 
+            else if(i=2) { ans[idx]="Silver Medal"; i++;} 
+            else if(i=3) { ans[idx]="Bronze Medal"; i++;} 
+            else ans[idx]=Integer.toString(i++);
+        }
+        return reorderArray(ans);  
+    }
+
+    private String[] reorderArray(String[] ranks){
+        
+    }
+}
+```"""
+
+
+
+
+
+
+
+
 EXAMPLE_INPUT_JAVA_REPORT = """### Program requirements:
 ```
 You are given an integer array score of size n, where score[i] is the score of the ith athlete in a competition. All the scores are guaranteed to be unique.
@@ -418,6 +490,41 @@ EXAMPLE_OUTPUT_JAVA_HUNK = """```java
 ```
 ```java
 ```"""
+
+
+
+
+
+
+
+
+
+
+
+
+EXAMPLE_INPUT_PYTHON_REFINE = """```python3
+class Solution:
+    def addBinary(self, A, B):
+        res = []
+        carry = 0
+        while A or B or carry:
+            carry += (A or [0]).pop() + (B or [0]).pop()
+            res.append(carry & 1)
+            carry = carry >> 1
+        return res[::-1][1]  
+
+    def addNegabinary(self, A, B):
+        res = []
+        carry = 0
+        while A or B or carry:
+            carry += (A or [0]).pop() + (B or [0]).pop()
+            res.append(carry & 1)
+            carry = -(carry >> 1)
+        while len(res) > 1 and res[-1] == 0:
+            res.pop()
+        return res[::-1][1]
+```"""
+
 
 
 
@@ -806,6 +913,29 @@ HISTORY_REVERSE_CPP = [
 
 
 
+HISTORY_PURE_CPP = [
+        {
+            "role": "system",
+            "content": PURE_INSTRUCTION
+        },
+        {
+            "role": "user",
+            "content": EXAMPLE_INPUT_CPP_REFINE
+        },
+        {
+            "role": "assistant",
+            "content": EXAMPLE_OUTPUT_CPP_FUNC
+        },
+]
+
+
+
+
+
+
+
+
+
 HISTORY_AGENT_JAVA = [
         {
             "role": "system",
@@ -883,6 +1013,27 @@ HISTORY_REVERSE_JAVA = [
             "content": EXAMPLE_OUTPUT_JAVA_HUNK
         }
 ]
+
+
+
+
+
+
+HISTORY_PURE_JAVA = [
+        {
+            "role": "system",
+            "content": PURE_INSTRUCTION
+        },
+        {
+            "role": "user",
+            "content": EXAMPLE_INPUT_JAVA_REFINE
+        },
+        {
+            "role": "assistant",
+            "content": EXAMPLE_OUTPUT_JAVA_FUNC
+        }
+]
+
 
 
 
@@ -976,6 +1127,27 @@ HISTORY_REVERSE_PYTHON = [
 
 
 
+HISTORY_PURE_PYTHON = [
+        {
+            "role": "system",
+            "content": PURE_INSTRUCTION
+        },
+        {
+            "role": "user",
+            "content": EXAMPLE_INPUT_PYTHON_REFINE
+        },
+        {
+            "role": "assistant",
+            "content": EXAMPLE_OUTPUT_PYTHON_FUNC
+        }
+]
+
+
+
+
+
+
+
 
 HISTORY_MERGE_CPP = [
         {
@@ -1044,3 +1216,4 @@ HISTORY_LOCATED_LIST = {'cpp': HISTORY_LOCATED_CPP, 'java': HISTORY_LOCATED_JAVA
 HISTORY_HYBRID_LIST = {'cpp': HISTORY_HYBRID_CPP, 'java': HISTORY_HYBRID_JAVA, 'python3': HISTORY_HYBRID_PYTHON}
 HISTORY_REVERSE_LIST = {'cpp': HISTORY_REVERSE_CPP, 'java': HISTORY_REVERSE_JAVA, 'python3': HISTORY_REVERSE_PYTHON}
 HISTORY_MERGE_LIST = {'cpp': HISTORY_MERGE_CPP, 'java': HISTORY_MERGE_JAVA, 'python3': HISTORY_MERGE_PYTHON}
+HISTORY_PURE_LIST = {'cpp': HISTORY_PURE_CPP, 'java': HISTORY_PURE_JAVA, 'python3': HISTORY_PURE_PYTHON}

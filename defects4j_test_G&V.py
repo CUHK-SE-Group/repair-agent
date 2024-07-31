@@ -32,7 +32,12 @@ def debug(args):
         reward_true_df = plausible_df[plausible_df['reward'] == True]
         slugs = set(reward_true_df['slug'])
 
-    history = HISTORY_AGENT_D4J
+    if args.mode == 'agent':
+        history = HISTORY_AGENT_D4J
+    elif args.mode == 'pure':
+        history = HISTORY_PURE_D4J
+    else:
+        raise ValueError("mode must be 'agent' or 'pure'")
 
     if args.chat_mode == 'remote':
         debugger = RemoteChatter(args.api_key, args.remote_model)
@@ -57,12 +62,18 @@ def debug(args):
         
 
         prompt = history.copy()
-        query = AGENT_PROMPT
-        query = query.replace("{BUGGY_COMMENT}", sample['comment'].strip() if str(sample['comment']) not in {'', 'nan'} else "This function has no comment.")
-        query = query.replace("{ERROR_MESSAGE}", msg[msg['slug'] == sample['slug']]['exception_info'].values[0] if len(msg[msg['slug'] == sample['slug']]['exception_info'].values) > 0 else "This function has no exception info.")
-        query = query.replace("{FAILED_TEST}", msg[msg['slug'] == sample['slug']]['test_method'].values[0] if len(msg[msg['slug'] == sample['slug']]['test_method'].values) > 0 else "This function has no failed test.")
-        query = query.replace("{BUGGY_CODE}", sample['buggy_code'].strip())
-        
+        if args.mode == 'agent':
+            query = AGENT_PROMPT
+            query = query.replace("{BUGGY_COMMENT}", sample['comment'].strip() if str(sample['comment']) not in {'', 'nan'} else "This function has no comment.")
+            query = query.replace("{ERROR_MESSAGE}", msg[msg['slug'] == sample['slug']]['exception_info'].values[0] if len(msg[msg['slug'] == sample['slug']]['exception_info'].values) > 0 else "This function has no exception info.")
+            query = query.replace("{FAILED_TEST}", msg[msg['slug'] == sample['slug']]['test_method'].values[0] if len(msg[msg['slug'] == sample['slug']]['test_method'].values) > 0 else "This function has no failed test.")
+            query = query.replace("{BUGGY_CODE}", sample['buggy_code'].strip())
+        elif args.mode == 'pure':
+            query = USER_PROMPT
+            query = query.replace("{BUGGY_CODE}", sample['buggy_code'].strip())
+        else:
+            raise ValueError("mode must be 'agent' or 'pure'")
+                                
         prompt.append({
             "role": "user",
             "content": query
@@ -149,6 +160,7 @@ if __name__ == '__main__':
     parser.add_argument('--result_path', default="result/defects4j/results", type=str)
     parser.add_argument('--eval_path', default="result/defects4j/evaluation", type=str)
     parser.add_argument('--proxy', default='OpenAI', type=str)
+    parser.add_argument('--mode', default='agent', type=str)
     parser.add_argument('--shot', default=1, type=int)
     parser.add_argument('--max_try', default=10, type=int)
     parser.add_argument('--temperature', default=1.0, type=float)
