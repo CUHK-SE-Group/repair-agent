@@ -28,6 +28,8 @@ The entry of the script is `batch.sh`. The main scripts for Defects4J and DebugB
 
 ### Environment Preparation
 
+- Install the Python library dependencies listed in `requirements.txt`.
+
 - Modify the first line of `batch.sh` to use your own API key: `api_key='sk-xxx'`
     - To obtain an OpenAI API Key to start generation. 
     - See [OpenAI Platform](https://platform.openai.com/api-keys) to understand how to get your own API key.
@@ -43,6 +45,8 @@ The entry of the script is `batch.sh`. The main scripts for Defects4J and DebugB
 - Directly run `batch.sh`.
     - The script validates the generated patches simultaneously while generating patches.
     - The relationship between the script and the RQ experiments can be found in the comments inside `batch.sh`.
+
+- To obtain the experimental results in a non-perfect FL setting, you should first download [FLUCCS](https://bitbucket.org/teamcoinse/fluccs/src/master/), a method-level fault localization tool. Then, find the common buggy methods located by FLUCCS in Defects4J v1.2 and correctly fixed by D4C to get the results.
 
 ## Results
 
